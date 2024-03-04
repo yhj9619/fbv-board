@@ -1,25 +1,35 @@
 {% extends 'board/base.html' %}
 {% block title %}목록{% endblock %}
 {% block content %}
-{% if board_list %}
-    <table border="1">
-        <tr>
-            <th>번호</th>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>조회수</th>
-        </tr>
-        {% for board in board_list %}
+
+{% if user.is_authenticated %}
+안녕하세요 ! {{user.username}}님, <br>
+    {% if board_list %}
+        <table id="example" class="cell-border" border="1">
             <tr>
-                <td>{{board.id}}</td>
-                <td><a href="{% url 'board:read' board.id %}">{{board.title}}</a></td>
-                <td>{{board.writer}}</td>
-                <td>{{board.readcount}}</td>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>조회수</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for board in board_list %}
+                <tr>
+                    
+                    <td><a href="{% url 'board:read' board.id %}">{{board.id}}</a></td>
+                    <td>{{board.title}}</td>
+                    <td>{{board.writer}}</td>
+                    <td>{{board.readcount}}</td>
+                    </a>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        게시글이 존재하지 않습니다.<br>
+    {% endif %}
+<a href="{% url 'board:regist' '0' %}"><button>등록</button></a>
+<a href="{% url 'user:logout' %}"><button>로그아웃</button></a>
 {% else %}
-    게시글이 존재하지 않습니다.
+<a href="{% url 'user:signup' %}"><button>회원가입</button></a>
+<a href="{% url 'user:login' %}"><button>로그인</button></a>
 {% endif %}
-<a href="{% url 'board:regist' %}"><button>등록</button></a>
 {% endblock %}
